@@ -1,0 +1,79 @@
+import arcpy
+import xlrd
+import array
+from array import *
+counterSHP = 0
+counterXLS = 0
+check = 0 
+list = []
+
+A = arcpy.GetParameterAsText(0) # Import 
+arcpy.AddMessage("Params")
+arcpy.AddMessage(A)
+
+outputFolderPath = arcpy.GetParameterAsText(2)
+arcpy.AddMessage("outputFolderPath ")
+arcpy.AddMessage(outputFolderPath)
+
+anyValue = arcpy.GetParameterAsText(3)
+arcpy.AddMessage("Any Value ")
+arcpy.AddMessage(anyValue)
+
+myList  = [arcpy.GetParameterAsText(0)]
+arcpy.AddMessage("params length")
+arcpy.env.workspace = "F:\Survey\Mussoorie\Test For Automation back to arcgis"
+arcpy.AddMessage(arcpy.ListFiles("*.xls")[0])	   # returns the name of the .xlsm file at the zeroeth location 	
+#arcpy.AddMessage(arcpy.ListFiles("*.shp")[0])      # returns the name of the .shp file at the zeroeth location
+#arcpy.AddMessage(len(arcpy.ListFiles("*.shp")[0])) # returns the length of the name of the file at the zeroeth location
+#arcpy.AddMessage(arcpy.ListFiles("*.shp")[0][:2])  # returns the first 2 characters of the name of the file
+for i in arcpy.ListFiles("*.xls"): # 19
+	#a= array(i)
+	counterXLS = counterXLS + 1 
+	arcpy.AddMessage("IN FOR")
+	arcpy.AddMessage(i)
+	book = xlrd.open_workbook(i)
+	sheet = book.sheet_by_index(0) # Get the first sheet
+	arcpy.AddMessage(counterSHP)
+	list.append([sheet.cell(14,7)])
+	arcpy.AddMessage (sheet.cell(14,7).value) # 27
+	arcpy.AddMessage(arcpy.ListFiles("*.shp")[counterXLS-1])
+	arcpy.AddMessage ("final OutPut Path454")
+	arcpy.AddMessage (outputFolderPath+str(sheet.cell(15,7).value)+arcpy.ListFiles("*.shp")[counterXLS-1])
+	arcpy.CopyFeatures_management(arcpy.ListFiles("*.shp")[counterXLS-1], outputFolderPath+"_"+anyValue+"_"+str(int(sheet.cell(15,7).value)))
+
+	
+
+
+#arcpy.AddMessage("list len")
+#arcpy.AddMessage(len(list))
+for j in arcpy.ListFiles("*.shp"):
+	counterSHP = counterSHP + 1
+
+#arcpy.AddMessage("counterSHP value is ")
+#arcpy.AddMessage(counterSHP)
+#arcpy.AddMessage ("(counterXLS  value is ")
+#arcpy.AddMessage(counterXLS )
+
+for num in range(0,counterXLS):
+	for num1 in range(1,counterXLS):
+		if list[num-1] == list[num1]:	
+			arcpy.AddMessage ("NUM")
+			arcpy.AddMessage (num-1)
+			arcpy.AddMessage ("NUM1")
+			arcpy.AddMessage (num1)
+			arcpy.AddMessage ("GOTTAA!!")
+			arcpy.AddMessage ("name of cluster file is : ")
+			arcpy.AddMessage (arcpy.ListFiles("*.shp")[num-1][:2]) 
+			arcpy.AddMessage ("for value ")
+			arcpy.AddMessage (list[num-1])
+arcpy.AddMessage ("lenLIST") 
+arcpy.AddMessage (len(list)) 
+
+#arcpy.CopyFeatures_management(A, B)
+
+
+
+
+
+
+
